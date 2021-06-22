@@ -3,6 +3,7 @@
 namespace Tests;
 
 use Abdeslam\Configuration\Exceptions\ConfigurationFileNotFoundException;
+use Abdeslam\Configuration\Exceptions\InvalidConfigurationContentException;
 use Abdeslam\Configuration\Loaders\JSONConfigurationLoader;
 use Abdeslam\Configuration\Loaders\PHPConfigurationLoader;
 use PHPUnit\Framework\TestCase;
@@ -62,5 +63,19 @@ class ConfigurationLoaderTest extends TestCase
             ['non_existent_configuration_file']
         );
         $method->setAccessible(false);
+    }
+
+    /**
+     * @test
+     */
+    public function loaderLoadFileWithInvalidContent()
+    {
+        $loader = new PHPConfigurationLoader();
+        $this->expectException(InvalidConfigurationContentException::class);
+        $loader->load(__DIR__ . '/config/config.json');
+
+        $loader = new JSONConfigurationLoader();
+        $this->expectException(InvalidConfigurationContentException::class);
+        $loader->load(__DIR__ . '/config/config.php');
     }
 }
