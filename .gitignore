@@ -2,4 +2,4 @@
 /.phpunit.cache/
 /.phpunit.coverage/
 /.phpunit.*
-/.VSCode*
+/.VSCodeCounter/
