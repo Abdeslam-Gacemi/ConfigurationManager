@@ -1,15 +1,20 @@
 <?php
+error_reporting(E_ALL);
 
-use Abdeslam\Configuration\Configuration;
+use Abdeslam\Configuration\ConfigurationManager;
+use Abdeslam\Configuration\ConfigurationManagerFactory;
+use Abdeslam\Configuration\Loaders\JSONConfigurationLoader;
 use Abdeslam\Configuration\Loaders\PHPConfigurationLoader;
 
 require __DIR__.'/../vendor/autoload.php';
 
-$loader = new PHPConfigurationLoader(__DIR__);
-$config = new Configuration($loader, 'conf.php');
+$loader = new PHPConfigurationLoader();
+$config = new ConfigurationManager();
+$config->addLoader($loader, __DIR__ . '/config/conf.php');
 
-/* var_dump($config->get('app'));
+echo $config->get('app');
 
-var_dump($config->get('database.development')); */
-
-var_dump($config->get('non_existant_key', 'hello'));
+$config = ConfigurationManagerFactory::createJSONConfigurationManager(__DIR__ . '/config/config.json');
+$config->setKeySeparator('_');
+echo $config->get('debug_verbose');
+echo $config->get('env');

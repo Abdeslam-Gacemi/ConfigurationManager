@@ -77,7 +77,7 @@ class ConfigurationManager implements ConfigurationManagerInterface
                 if ($default !== self::NO_DEFAULT_VALUE) {
                     return $default;
                 } else {
-                    throw new ConfigurationItemNotFoundException("Item with the key '$key' not found");
+                    throw new ConfigurationItemNotFoundException("Item with the key '$key' not found in " . json_encode($current));
                 }
             }
             $current = $current[$key];
