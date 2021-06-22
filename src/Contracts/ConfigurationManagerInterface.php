@@ -60,6 +60,14 @@ interface ConfigurationManagerInterface
     public function set(string $key, $value): self;
 
     /**
+     * removes an item from the configuration items array
+     *
+     * @param string $key
+     * @return self
+     */
+    public function unset(string $key): self;
+
+    /**
      * return the array of configuration items
      *
      * @return array

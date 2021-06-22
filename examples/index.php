@@ -1,9 +1,7 @@
 <?php
-error_reporting(E_ALL);
 
 use Abdeslam\Configuration\ConfigurationManager;
 use Abdeslam\Configuration\ConfigurationManagerFactory;
-use Abdeslam\Configuration\Loaders\JSONConfigurationLoader;
 use Abdeslam\Configuration\Loaders\PHPConfigurationLoader;
 
 require __DIR__.'/../vendor/autoload.php';

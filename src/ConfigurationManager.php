@@ -94,6 +94,12 @@ class ConfigurationManager implements ConfigurationManagerInterface
         return $this;
     }
 
+    public function unset(string $key): ConfigurationManagerInterface
+    {
+        unset($this->items[$key]);
+        return $this;
+    }
+
     /**
      * @inheritDoc
      */

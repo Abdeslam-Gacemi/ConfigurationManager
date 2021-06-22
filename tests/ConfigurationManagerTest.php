@@ -162,6 +162,16 @@ class ConfigurationManagerTest extends TestCase
     /**
      * @test
      */
+    public function configurationUnset()
+    {
+        $config = $this->createDefaultConfiguration();
+        $config->unset('app');
+        $this->assertFalse($config->has('app'));
+    }
+
+    /**
+     * @test
+     */
     public function configurationReset()
     {
         $config = $this->createDefaultConfiguration();
@@ -221,6 +231,7 @@ class ConfigurationManagerTest extends TestCase
             'abdeslam',
             $config->get('author.name')
         );
+        // test with a custom loader
         $newLoader = new class implements ConfigurationLoaderInterface {
             public function load($filename): array
             {
