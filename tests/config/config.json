@@ -1,0 +1,9 @@
+{
+    "environment": "development",
+    "debug": true,
+    "author": {
+        "name": "abdeslam",
+        "email": "abdobling@gmail.com",
+        "language": "php"
+    }
+}

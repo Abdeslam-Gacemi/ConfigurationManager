@@ -1,0 +1,21 @@
+{
+    "name": "abdeslam/configuration",
+    "require-dev": {
+        "phpunit/phpunit": "^9.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "Abdeslam\\Configuration\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "Tests\\": "tests/"
+    },
+    "authors": [
+        {
+            "name": "Abdeslam Gacemi",
+            "email": "abdobling@gmail.com"
+        }
+    ],
+    "require": {}
+}
