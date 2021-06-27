@@ -1,6 +1,17 @@
 {
-    "name": "abdeslam/configuration",
+    "name": "abdeslam/configuration-manager",
+    "type": "package",
+    "version": "1.0.0",
+    "authors": [
+        {
+            "name": "Abdeslam Gacemi",
+            "email": "abdobling@gmail.com"
+        }
+    ],
+    "license": "MIT",
+    "keywords": ["configuration", "config", "manager", "loader"],
     "require-dev": {
+        "php": "^8.0",
         "phpunit/phpunit": "^9.5"
     },
     "autoload": {
@@ -12,11 +23,5 @@
         "psr-4": {
             "Tests\\": "tests/"
         }
-    },
-    "authors": [
-        {
-            "name": "Abdeslam Gacemi",
-            "email": "abdobling@gmail.com"
-        }
-    ]
+    }
 }
