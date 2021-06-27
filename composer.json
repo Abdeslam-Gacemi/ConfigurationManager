@@ -5,11 +5,13 @@
     },
     "autoload": {
         "psr-4": {
-            "Abdeslam\\Configuration\\": "src/"
+            "Abdeslam\\": "src/"
         }
     },
     "autoload-dev": {
-        "Tests\\": "tests/"
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
     },
     "authors": [
         {

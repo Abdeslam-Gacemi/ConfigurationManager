@@ -1,11 +1,15 @@
 <?php
 
-namespace Abdeslam\Configuration\Loaders;
+/**
+* @author Abdeslam Gacemi <abdobling@gmail.com>
+*/
 
-use Abdeslam\Configuration\Contracts\ConfigurationLoaderInterface;
-use Abdeslam\Configuration\Exceptions\InvalidConfigurationFileException;
-use Abdeslam\Configuration\Exceptions\ConfigurationFileNotFoundException;
-use Abdeslam\Configuration\Exceptions\InvalidConfigurationContentException;
+namespace Abdeslam\ConfigurationManager\Loaders;
+
+use Abdeslam\ConfigurationManager\Contracts\ConfigurationLoaderInterface;
+use Abdeslam\ConfigurationManager\Exceptions\InvalidConfigurationFileException;
+use Abdeslam\ConfigurationManager\Exceptions\ConfigurationFileNotFoundException;
+use Abdeslam\ConfigurationManager\Exceptions\InvalidConfigurationContentException;
 
 class JSONConfigurationLoader implements ConfigurationLoaderInterface
 {
@@ -22,6 +26,13 @@ class JSONConfigurationLoader implements ConfigurationLoaderInterface
         return $resultContent;
     }
 
+    /**
+     * loads a single configuration file
+     *
+     * @param string $filepath
+     * @return array
+     * @throws InvalidConfigurationContentException
+     */
     protected function loadFile(string $filepath): array
     {
         $this->validateFile($filepath);
@@ -35,7 +46,14 @@ class JSONConfigurationLoader implements ConfigurationLoaderInterface
         return $content;
     }
 
-
+    /**
+     * checks if the configuration file is valid
+     *
+     * @param string $filepath
+     * @return void
+     * @throws ConfigurationFileNotFoundException
+     * @throws InvalidConfigurationFileException
+     */
     protected function validateFile(string $filepath): void
     {
         $ext = pathinfo($filepath, PATHINFO_EXTENSION);

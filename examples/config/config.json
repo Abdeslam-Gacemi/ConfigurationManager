@@ -1,7 +1,0 @@
-{
-    "env": "development",
-    "debug": {
-        "active": true,
-        "verbose": true
-    }
-}

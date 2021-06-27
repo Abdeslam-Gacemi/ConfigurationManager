@@ -1,15 +1,18 @@
 <?php
 
+/**
+* @author Abdeslam Gacemi <abdobling@gmail.com>
+*/
+
 namespace Tests;
 
-use Abdeslam\Configuration\Exceptions\ConfigurationFileNotFoundException;
-use Abdeslam\Configuration\Exceptions\InvalidConfigurationContentException;
-use Abdeslam\Configuration\Exceptions\InvalidConfigurationFileException;
-use Abdeslam\Configuration\Loaders\JSONConfigurationLoader;
-use Abdeslam\Configuration\Loaders\PHPConfigurationLoader;
-use Abdeslam\Configuration\Loaders\XMLConfigurationLoader;
-use PHPUnit\Framework\TestCase;
 use ReflectionClass;
+use PHPUnit\Framework\TestCase;
+use Abdeslam\ConfigurationManager\Loaders\PHPConfigurationLoader;
+use Abdeslam\ConfigurationManager\Loaders\XMLConfigurationLoader;
+use Abdeslam\ConfigurationManager\Loaders\JSONConfigurationLoader;
+use Abdeslam\ConfigurationManager\Exceptions\InvalidConfigurationFileException;
+use Abdeslam\ConfigurationManager\Exceptions\ConfigurationFileNotFoundException;
 
 class ConfigurationLoaderTest extends TestCase
 {
@@ -102,6 +105,5 @@ class ConfigurationLoaderTest extends TestCase
             ]
         ];
         $this->assertSame($expected, $configArray);
-
     }
 }

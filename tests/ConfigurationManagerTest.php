@@ -1,18 +1,22 @@
 <?php
 
+/**
+* @author Abdeslam Gacemi <abdobling@gmail.com>
+*/
+
 namespace Tests;
 
 use ReflectionClass;
 use PHPUnit\Framework\TestCase;
-use Abdeslam\Configuration\ConfigurationManager;
-use Abdeslam\Configuration\Exceptions\InvalidKeyException;
-use Abdeslam\Configuration\Loaders\PHPConfigurationLoader;
-use Abdeslam\Configuration\Loaders\JSONConfigurationLoader;
-use Abdeslam\Configuration\Contracts\ConfigurationLoaderInterface;
-use Abdeslam\Configuration\Exceptions\ConfigurationItemNotFoundException;
+use Abdeslam\ConfigurationManager\ConfigurationManager;
+use Abdeslam\ConfigurationManager\Exceptions\InvalidKeyException;
+use Abdeslam\ConfigurationManager\Loaders\PHPConfigurationLoader;
+use Abdeslam\ConfigurationManager\Loaders\JSONConfigurationLoader;
+use Abdeslam\ConfigurationManager\Contracts\ConfigurationLoaderInterface;
+use Abdeslam\ConfigurationManager\Exceptions\ConfigurationItemNotFoundException;
 
 /**
- * @coversDefaultClass \Abdeslam\Configuration\Configuration
+ * @coversDefaultClass \Abdeslam\ConfigurationManager\Configuration
  */
 class ConfigurationManagerTest extends TestCase
 {
@@ -22,8 +26,9 @@ class ConfigurationManagerTest extends TestCase
      */
     public function configurationHasItems()
     {
-        $config = $this->createDefaultConfiguration();
-        $configItems = $config->all();
+        $manager = $this->createDefaultConfiguration();
+        $manager->load();
+        $managerItems = $manager->all();
         $expected = [
             'app' => 'my-app',
             'credentials' => [
@@ -31,10 +36,10 @@ class ConfigurationManagerTest extends TestCase
                 'password' => '1234'
             ]
         ];
-        $this->assertNotEmpty($configItems);
+        $this->assertNotEmpty($managerItems);
         $this->assertSame(
             $expected,
-            $configItems
+            $managerItems
         );
     }
 
@@ -43,9 +48,11 @@ class ConfigurationManagerTest extends TestCase
      */
     public function configurationHas()
     {
-        $config = $this->createDefaultConfiguration();
-        $this->assertTrue($config->has('app'));
-        $this->assertFalse($config->has('non_existent_key'));
+        $manager = $this->createDefaultConfiguration();
+        $manager->load();
+        $manager->all();
+        $this->assertTrue($manager->has('app'));
+        $this->assertFalse($manager->has('non_existent_key'));
     }
 
     /**
@@ -53,13 +60,14 @@ class ConfigurationManagerTest extends TestCase
      */
     public function configurationGet()
     {
-        $config = $this->createDefaultConfiguration();
+        $manager = $this->createDefaultConfiguration();
+        $manager->load();
         $this->assertSame(
-            $config->get('app'),
+            $manager->get('app'),
             'my-app'
         );
         $this->assertSame(
-            $config->get('credentials.username'),
+            $manager->get('credentials.username'),
             'user1'
         );
     }
@@ -70,9 +78,10 @@ class ConfigurationManagerTest extends TestCase
      */
     public function configurationGetNonexistentKey()
     {
-        $config = $this->createDefaultConfiguration();
+        $manager = $this->createDefaultConfiguration();
+        $manager->load();
         $this->expectException(ConfigurationItemNotFoundException::class);
-        $config->get('non_existent_key');
+        $manager->get('non_existent_key');
     }
 
     /**
@@ -80,9 +89,10 @@ class ConfigurationManagerTest extends TestCase
      */
     public function configurationGetWithDefaultValue()
     {
-        $config = $this->createDefaultConfiguration();
+        $manager = $this->createDefaultConfiguration();
+        $manager->load();
         $this->assertSame(
-            $config->get('non_existent_key', 'value'),
+            $manager->get('non_existent_key', 'value'),
             'value'
         );
     }
@@ -93,19 +103,20 @@ class ConfigurationManagerTest extends TestCase
     public function configurationWithMultipleFiles()
     {
         $loader = new PHPConfigurationLoader();
-        $config = new ConfigurationManager();
-        $config->addLoader(
+        $manager = new ConfigurationManager();
+        $manager->addLoader(
             $loader,
             __DIR__ . '/config/config.php',
             __DIR__ . '/config/config2.php'
         );
+        $manager->load();
         $this->assertArrayHasKey(
             'default_local',
-            $config->all()
+            $manager->all()
         );
         $this->assertSame(
             'en',
-            $config->get('default_local')
+            $manager->get('default_local')
         );
     }
 
@@ -115,15 +126,16 @@ class ConfigurationManagerTest extends TestCase
     public function configurationMergeArray()
     {
         $loader = new PHPConfigurationLoader();
-        $config = new ConfigurationManager();
-        $config->addLoader(
+        $manager = new ConfigurationManager();
+        $manager->addLoader(
             $loader,
             __DIR__ . '/config/config.php',
             __DIR__ . '/config/config2.php'
         );
-        $config->merge(['foo' => 'bar']);
-        $this->assertTrue($config->has('foo'));
-        $this->assertSame('bar', $config->get('foo'));
+        $manager->load();
+        $manager->merge(['foo' => 'bar']);
+        $this->assertTrue($manager->has('foo'));
+        $this->assertSame('bar', $manager->get('foo'));
     }
 
     /**
@@ -132,15 +144,17 @@ class ConfigurationManagerTest extends TestCase
     public function configurationMergeConfigurationObject()
     {
         $loader = new PHPConfigurationLoader();
-        $config = new ConfigurationManager();
-        $config->addLoader(
+        $manager = new ConfigurationManager();
+        $manager->addLoader(
             $loader,
             __DIR__ . '/config/config2.php'
         );
-        $config2 = $this->createDefaultConfiguration();
-        $config->merge($config2);
-        $this->assertTrue($config->has('default_local'));
-        $this->assertSame('en', $config->get('default_local'));
+        $manager->load();
+        $manager2 = $this->createDefaultConfiguration();
+        $manager->load();
+        $manager->merge($manager2);
+        $this->assertTrue($manager->has('default_local'));
+        $this->assertSame('en', $manager->get('default_local'));
     }
 
     /**
@@ -148,20 +162,22 @@ class ConfigurationManagerTest extends TestCase
      */
     public function configurationSet()
     {
-        $config = $this->createDefaultConfiguration();
-        $config->set('foo', 'bar');
-        $this->assertTrue($config->has('foo'));
-        $this->assertSame('bar', $config->get('foo'));
+        $manager = $this->createDefaultConfiguration();
+        $manager->load();
+        $manager->set('foo', 'bar');
+        $this->assertTrue($manager->has('foo'));
+        $this->assertSame('bar', $manager->get('foo'));
     }
 
     /**
      * @test
      */
-    public function configurationUnset()
+    public function configurationRemove()
     {
-        $config = $this->createDefaultConfiguration();
-        $config->unset('app');
-        $this->assertFalse($config->has('app'));
+        $manager = $this->createDefaultConfiguration();
+        $manager->load();
+        $manager->remove('app');
+        $this->assertFalse($manager->has('app'));
     }
 
     /**
@@ -169,14 +185,15 @@ class ConfigurationManagerTest extends TestCase
      */
     public function configurationReset()
     {
-        $config = $this->createDefaultConfiguration();
-        $config->setKeySeparator('#');
-        $config->reset();
-        $this->assertEmpty($config->all());
-        $this->assertEmpty($config->getLoaders());
+        $manager = $this->createDefaultConfiguration();
+        $manager->load();
+        $manager->setKeySeparator('#');
+        $manager->reset();
+        $this->assertEmpty($manager->all());
+        $this->assertEmpty($manager->getLoaders());
         $this->assertSame(
             '.',
-            $config->getKeySeparator()
+            $manager->getKeySeparator()
         );
     }
 
@@ -185,25 +202,35 @@ class ConfigurationManagerTest extends TestCase
      */
     public function configurationGetLoader()
     {
-        $config = $this->createDefaultConfiguration();
+        $manager = $this->createDefaultConfiguration();
         $this->assertInstanceOf(
             PHPConfigurationLoader::class,
-            $config->getLoader(PHPConfigurationLoader::class)
+            $manager->getLoader(PHPConfigurationLoader::class)
         );
-        $this->assertNull($config->getLoader('non_existent_loader'));
+        $this->assertNull($manager->getLoader('non_existent_loader'));
     }
 
+    /**
+     * @test
+     */
+    public function configurationHasLoader()
+    {
+        $manager = $this->createDefaultConfiguration();
+        $this->assertTrue(
+            $manager->hasLoader(PHPConfigurationLoader::class)
+        );
+    }
 
     /**
      * @test
      */
     public function configurationGetLoaders()
     {
-        $config = $this->createDefaultConfiguration();
-        $this->assertNotNull($config->getLoaders());
-        $this->assertArrayHasKey(
-            PHPConfigurationLoader::class,
-            $config->getLoaders()
+        $manager = $this->createDefaultConfiguration();
+        $this->assertNotNull($manager->getLoaders());
+        $this->assertSame(
+            [PHPConfigurationLoader::class],
+            array_keys($manager->getLoaders())
         );
     }
 
@@ -212,31 +239,33 @@ class ConfigurationManagerTest extends TestCase
      */
     public function configurationAddLoader()
     {
-        $config = $this->createDefaultConfiguration();
+        $manager = $this->createDefaultConfiguration();
         $JSONLoader = new JSONConfigurationLoader();
-        $config->addLoader($JSONLoader, __DIR__ .'/config/config.json');
+        $manager->addLoader($JSONLoader, __DIR__ .'/config/config.json');
+        $manager->load();
         $this->assertArrayHasKey(
             JSONConfigurationLoader::class,
-            $config->getLoaders()
+            $manager->getLoaders()
         );
-        $this->assertTrue($config->has('debug'));
-        $this->assertTrue($config->get('debug'));
-        $this->assertTrue($config->has('author.name'));
+        $this->assertTrue($manager->has('debug'));
+        $this->assertTrue($manager->get('debug'));
+        $this->assertTrue($manager->has('author.name'));
         $this->assertSame(
             'abdeslam',
-            $config->get('author.name')
+            $manager->get('author.name')
         );
         // test with a custom loader
         $newLoader = new class implements ConfigurationLoaderInterface {
-            public function load($filename): array
+            public function load(array $filename): array
             {
                 return ["hello" => "world"];
             }
         };
-        $config->addLoader($newLoader, 'foo');
-        $this->assertTrue($config->has('hello'));
+        $manager->addLoader($newLoader, 'foo');
+        $manager->load();
+        $this->assertTrue($manager->has('hello'));
         $this->assertSame(
-            $config->get('hello'),
+            $manager->get('hello'),
             'world'
         );
     }
@@ -246,17 +275,18 @@ class ConfigurationManagerTest extends TestCase
      */
     public function configurationSetKeySeparator()
     {
-        $config = $this->createDefaultConfiguration();
-        $config->setKeySeparator('_');
+        $manager = $this->createDefaultConfiguration();
+        $manager->load();
+        $manager->setKeySeparator('_');
         $this->assertSame(
             '_',
-            $config->getKeySeparator()
+            $manager->getKeySeparator()
         );
         $this->assertSame(
             'user1',
-            $config->get('credentials_username')
+            $manager->get('credentials_username')
         );
-        $this->assertFalse($config->has('credentials.username'));
+        $this->assertFalse($manager->has('credentials.username'));
     }
 
     /**
@@ -264,21 +294,21 @@ class ConfigurationManagerTest extends TestCase
      */
     public function configurationResolveKey()
     {
-        $config = $this->createDefaultConfiguration();
-        $reflect = new ReflectionClass($config);
+        $manager = $this->createDefaultConfiguration();
+        $reflect = new ReflectionClass($manager);
         $method = $reflect->getMethod('resolveKey');
         $method->setAccessible(true);
         $this->assertSame(
             ['key1', 'key2'],
-            $method->invokeArgs($config, ['key1.key2'])
+            $method->invokeArgs($manager, ['key1.key2'])
         );
         $this->assertSame(
             ['key1'],
-            $method->invokeArgs($config, ['key1'])
+            $method->invokeArgs($manager, ['key1'])
         );
 
         $this->expectException(InvalidKeyException::class);
-        $method->invokeArgs($config, [1]);
+        $method->invokeArgs($manager, [1]);
         $method->setAccessible(false);
     }
 
@@ -291,11 +321,11 @@ class ConfigurationManagerTest extends TestCase
     private function createDefaultConfiguration(): ConfigurationManager
     {
         $loader = new PHPConfigurationLoader();
-        $config = new ConfigurationManager();
-        $config->addLoader(
+        $manager = new ConfigurationManager();
+        $manager->addLoader(
             $loader,
             __DIR__ . '/config/config.php'
         );
-        return $config;
+        return $manager;
     }
 }

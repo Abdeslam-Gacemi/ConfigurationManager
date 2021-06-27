@@ -1,6 +1,10 @@
 <?php
 
-namespace Abdeslam\Configuration\Contracts;
+/**
+* @author Abdeslam Gacemi <abdobling@gmail.com>
+*/
+
+namespace Abdeslam\ConfigurationManager\Contracts;
 
 interface ConfigurationLoaderInterface
 {

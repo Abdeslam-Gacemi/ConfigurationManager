@@ -1,9 +1,13 @@
 <?php
 
-namespace Abdeslam\Configuration\Contracts;
+/**
+* @author Abdeslam Gacemi <abdobling@gmail.com>
+*/
 
-use Abdeslam\Configuration\Exceptions\ConfigurationItemNotFoundException;
-use Abdeslam\Configuration\Contracts\ConfigurationLoaderInterface;
+namespace Abdeslam\ConfigurationManager\Contracts;
+
+use Abdeslam\ConfigurationManager\Contracts\ConfigurationLoaderInterface;
+use Abdeslam\ConfigurationManager\Exceptions\ConfigurationItemNotFoundException;
 
 interface ConfigurationManagerInterface
 {
@@ -11,6 +15,7 @@ interface ConfigurationManagerInterface
     const NO_DEFAULT_VALUE = '__no_default_value__';
 
     /**
+     * registers a loader to the loaders array and associate it with the corresponding configuration files to load
      * @param ConfigurationLoaderInterface $loader a configuration loader
      * @param string|string[] $filePath the path of configuration file or files to load
      * @return self
@@ -24,6 +29,14 @@ interface ConfigurationManagerInterface
      * @return ConfigurationLoaderInterface|null
      */
     public function getLoader(string $loader): ?ConfigurationLoaderInterface;
+
+    /**
+     * return true if the manager has a loader registered and false otherwise
+     *
+     * @param string $loader the loader class name
+     * @return boolean
+     */
+    public function hasLoader(string $loader): bool;
 
     /**
      * returns the array of registered loaders
@@ -65,7 +78,7 @@ interface ConfigurationManagerInterface
      * @param string $key
      * @return self
      */
-    public function unset(string $key): self;
+    public function remove(string $key): self;
 
     /**
      * return the array of configuration items
@@ -104,4 +117,11 @@ interface ConfigurationManagerInterface
      * @return void
      */
     public function reset(): self;
+
+    /**
+     * loads the content of the configuration files through the registered loaders
+     *
+     * @return self
+     */
+    public function load(): self;
 }

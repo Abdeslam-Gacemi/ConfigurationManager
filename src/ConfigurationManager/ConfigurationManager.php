@@ -1,17 +1,21 @@
 <?php
 
-namespace Abdeslam\Configuration;
+/**
+* @author Abdeslam Gacemi <abdobling@gmail.com>
+*/
 
-use Abdeslam\Configuration\Contracts\ConfigurationLoaderInterface;
-use Abdeslam\Configuration\Contracts\ConfigurationManagerInterface;
-use Abdeslam\Configuration\Exceptions\ConfigurationItemNotFoundException;
-use Abdeslam\Configuration\Exceptions\InvalidKeyException;
-use Abdeslam\Configuration\Exceptions\InvalidMergeItemsException;
+namespace Abdeslam\ConfigurationManager;
+
+use Abdeslam\ConfigurationManager\Exceptions\InvalidKeyException;
+use Abdeslam\ConfigurationManager\Exceptions\InvalidMergeItemsException;
+use Abdeslam\ConfigurationManager\Contracts\ConfigurationLoaderInterface;
+use Abdeslam\ConfigurationManager\Contracts\ConfigurationManagerInterface;
+use Abdeslam\ConfigurationManager\Exceptions\ConfigurationItemNotFoundException;
 
 class ConfigurationManager implements ConfigurationManagerInterface
 {
     /** @var ConfigurationLoaderInterface[] */
-    protected $loaders;
+    protected $loaders = [];
 
     /** @var array */
     protected $items = [];
@@ -22,15 +26,23 @@ class ConfigurationManager implements ConfigurationManagerInterface
     /** @var string[] */
     protected $loadedFiles = [];
 
+    /** @var array */
+    protected $files = [];
+
     /**
      * @inheritDoc
      */
     public function addLoader(ConfigurationLoaderInterface $loader, string ...$filepaths): ConfigurationManagerInterface
     {
-        $key = get_class($loader);
-        $this->loaders[$key] = $loader;
-        $this->merge($loader->load($filepaths));
-        $this->loadedFiles = array_merge($this->loadedFiles, $filepaths);
+        $loaderClassName = get_class($loader);
+        $this->loaders[$loaderClassName] = $loader;
+        if (!array_key_exists($loaderClassName, $this->files)) {
+            $this->files[$loaderClassName] = [];
+        }
+        $this->files[$loaderClassName] = array_merge(
+            $this->files[$loaderClassName],
+            $filepaths
+        );
         return $this;
     }
 
@@ -40,6 +52,14 @@ class ConfigurationManager implements ConfigurationManagerInterface
     public function getLoader(string $loader): ?ConfigurationLoaderInterface
     {
         return $this->loaders[$loader] ?? null;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function hasLoader(string $loader): bool
+    {
+        return isset($this->loaders[$loader]);
     }
 
     /**
@@ -95,7 +115,10 @@ class ConfigurationManager implements ConfigurationManagerInterface
         return $this;
     }
 
-    public function unset(string $key): ConfigurationManagerInterface
+    /**
+     * @inheritDoc
+     */
+    public function remove(string $key): ConfigurationManagerInterface
     {
         unset($this->items[$key]);
         return $this;
@@ -119,9 +142,14 @@ class ConfigurationManager implements ConfigurationManagerInterface
         } elseif ($items instanceof ConfigurationManager) {
             $this->items = array_merge($this->items, $items->all());
         } else {
-            throw new InvalidMergeItemsException("Invalid items to merge, items must be an array or an instance of Abdeslam\Configuration\Configuration");
+            throw new InvalidMergeItemsException("Invalid items to merge, items must be an array or an instance of Abdeslam\ConfigurationManager\Configuration");
         }
         return $this;
+    }
+
+    public function getLoadedFiles(): array
+    {
+        return $this->loadedFiles;
     }
 
     /**
@@ -148,7 +176,24 @@ class ConfigurationManager implements ConfigurationManagerInterface
     {
         $this->loaders = [];
         $this->items = [];
+        $this->loadedFiles = [];
+        $this->files = [];
         $this->keySeparator = '.';
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     *
+     * @return ConfigurationManagerInterface
+     */
+    public function load(): ConfigurationManagerInterface
+    {
+        foreach ($this->files as $loaderClassName => $files) {
+            $loader = $this->loaders[$loaderClassName];
+            $this->merge($loader->load($files));
+            $this->loadedFiles = array_merge($this->loadedFiles, $files);
+        }
         return $this;
     }
 
