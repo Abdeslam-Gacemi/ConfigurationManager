@@ -154,7 +154,7 @@ $manager->load();
 
 ## Accessing values
 
-`ConfigurationManager::get()` and `ConfigurationManager::has()` use have **compound key resolving** capability separated by '.' by default and the key separator can be change, which means :
+`ConfigurationManager::get()` and `ConfigurationManager::has()` have **compound key resolving** capability separated by '.' by default and the key separator can be changed, which means :
 
 ```php
 <?php
