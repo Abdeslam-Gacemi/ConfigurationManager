@@ -1,0 +1,14 @@
+<?xml version='1.0'?>   
+<configuration>
+    <database>
+        <username>admin</username>
+        <password>1234</password>
+    </database>
+    <environments>
+        <development>
+            <debug>true</debug>
+            <verbose>true</verbose>
+            <verbosity>1.2</verbosity>
+        </development>
+    </environments>
+</configuration>

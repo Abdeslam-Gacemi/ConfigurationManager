@@ -3,6 +3,7 @@
 namespace Abdeslam\Configuration\Loaders;
 
 use Abdeslam\Configuration\Contracts\ConfigurationLoaderInterface;
+use Abdeslam\Configuration\Exceptions\InvalidConfigurationFileException;
 use Abdeslam\Configuration\Exceptions\ConfigurationFileNotFoundException;
 use Abdeslam\Configuration\Exceptions\InvalidConfigurationContentException;
 
@@ -11,39 +12,38 @@ class JSONConfigurationLoader implements ConfigurationLoaderInterface
     /**
      * @inheritDoc
      */
-    public function load($filePath): array
+    public function load(array $filepaths): array
     {
         $resultContent = [];
-        if (is_string($filePath)) {
-            $resultContent = $this->loadFile($filePath);
-        } elseif (is_array($filePath)) {
-            foreach ($filePath as $path) {
-                $content = $this->loadFile($path);
-                $resultContent = array_merge($resultContent, $content);
-            }
+        foreach ($filepaths as $filepath) {
+            $content = $this->loadFile($filepath);
+            $resultContent = array_merge($resultContent, $content);
         }
-
         return $resultContent;
     }
 
-    protected function loadFile(string $filePath): array
+    protected function loadFile(string $filepath): array
     {
-        $this->checkFileExists($filePath);
+        $this->validateFile($filepath);
 
-        $content = json_decode(file_get_contents($filePath), true);
+        $content = json_decode(file_get_contents($filepath), true);
 
         if (json_last_error() !== JSON_ERROR_NONE) {
-            throw new InvalidConfigurationContentException("Invalid json content from file $filePath");
+            throw new InvalidConfigurationContentException("Invalid json content from file $filepath");
         }
 
         return $content;
     }
 
 
-    protected function checkFileExists(string $filePath): void
+    protected function validateFile(string $filepath): void
     {
-        if (!file_exists($filePath)) {
-            throw new ConfigurationFileNotFoundException("File '$filePath' not found");
+        $ext = pathinfo($filepath, PATHINFO_EXTENSION);
+        if (!file_exists($filepath)) {
+            throw new ConfigurationFileNotFoundException("File '$filepath' not found");
+        }
+        if ($ext !== 'json') {
+            throw new InvalidConfigurationFileException("Configuration File extension must be .json");
         }
     }
 }

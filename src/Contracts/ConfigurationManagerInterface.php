@@ -15,7 +15,7 @@ interface ConfigurationManagerInterface
      * @param string|string[] $filePath the path of configuration file or files to load
      * @return self
     */
-    public function addLoader(ConfigurationLoaderInterface $loader, $filePath): self;
+    public function addLoader(ConfigurationLoaderInterface $loader, string ...$filePath): self;
 
     /**
      * return a loader from the registered loaders array

@@ -9,7 +9,6 @@ use Abdeslam\Configuration\Exceptions\InvalidKeyException;
 use Abdeslam\Configuration\Loaders\PHPConfigurationLoader;
 use Abdeslam\Configuration\Loaders\JSONConfigurationLoader;
 use Abdeslam\Configuration\Contracts\ConfigurationLoaderInterface;
-use Abdeslam\Configuration\Exceptions\InvalidKeyExceptionException;
 use Abdeslam\Configuration\Exceptions\ConfigurationItemNotFoundException;
 
 /**
@@ -97,10 +96,8 @@ class ConfigurationManagerTest extends TestCase
         $config = new ConfigurationManager();
         $config->addLoader(
             $loader,
-            [
-                __DIR__ . '/config/config.php',
-                __DIR__ . '/config/config2.php'
-            ]
+            __DIR__ . '/config/config.php',
+            __DIR__ . '/config/config2.php'
         );
         $this->assertArrayHasKey(
             'default_local',
@@ -121,10 +118,8 @@ class ConfigurationManagerTest extends TestCase
         $config = new ConfigurationManager();
         $config->addLoader(
             $loader,
-            [
-                __DIR__ . '/config/config.php',
-                __DIR__ . '/config/config2.php'
-            ]
+            __DIR__ . '/config/config.php',
+            __DIR__ . '/config/config2.php'
         );
         $config->merge(['foo' => 'bar']);
         $this->assertTrue($config->has('foo'));

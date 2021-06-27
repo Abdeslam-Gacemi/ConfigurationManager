@@ -9,17 +9,17 @@ use Abdeslam\Configuration\Contracts\ConfigurationManagerFactoryInterface;
 
 class ConfigurationManagerFactory implements ConfigurationManagerFactoryInterface
 {
-    public static function createPHPConfigurationManager($filePath): ConfigurationManager
+    public static function createPHPConfigurationManager(string ...$filePaths): ConfigurationManager
     {
         $loader = new PHPConfigurationLoader();
         $config =  new ConfigurationManager();
-        return $config->addLoader($loader, $filePath);
+        return $config->addLoader($loader, ...$filePaths);
     }
 
-    public static function createJSONConfigurationManager($filePath): ConfigurationManager
+    public static function createJSONConfigurationManager(string ...$filePaths): ConfigurationManager
     {
         $loader = new JSONConfigurationLoader();
         $config =  new ConfigurationManager();
-        return $config->addLoader($loader, $filePath);
+        return $config->addLoader($loader, ...$filePaths);
     }
 }

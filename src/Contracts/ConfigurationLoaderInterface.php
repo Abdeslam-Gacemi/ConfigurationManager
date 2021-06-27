@@ -11,5 +11,5 @@ interface ConfigurationLoaderInterface
      * @param string|array $filePath
      * @return array
      */
-    public function load($filePath): array;
+    public function load(array $filePath): array;
 }

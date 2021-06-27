@@ -19,15 +19,18 @@ class ConfigurationManager implements ConfigurationManagerInterface
     /** @var string */
     protected $keySeparator = '.';
 
+    /** @var string[] */
+    protected $loadedFiles = [];
+
     /**
      * @inheritDoc
      */
-    public function addLoader(ConfigurationLoaderInterface $loader, $filename): ConfigurationManagerInterface
+    public function addLoader(ConfigurationLoaderInterface $loader, string ...$filepaths): ConfigurationManagerInterface
     {
         $key = get_class($loader);
         $this->loaders[$key] = $loader;
-        $this->filename = $filename;
-        $this->merge($loader->load($filename));
+        $this->merge($loader->load($filepaths));
+        $this->loadedFiles = array_merge($this->loadedFiles, $filepaths);
         return $this;
     }
 
@@ -55,10 +58,8 @@ class ConfigurationManager implements ConfigurationManagerInterface
         $keys = $this->resolveKey($key);
         $current = $this->items;
         foreach ($keys as $key) {
-            if (!isset($current[$key])) {
-                if (!isset($current[$key])) {
-                    return false;
-                }
+            if (!array_key_exists($key, $current)) {
+                return false;
             }
             $current = $current[$key];
         }
