@@ -1,7 +1,8 @@
 {
     "name": "abdeslam/configuration-manager",
     "type": "package",
-    "version": "1.0.0",
+    "description": "A fast, powerful and flexible PHP, JSON and XML configuration loader",
+    "version": "v1.0.0",
     "authors": [
         {
             "name": "Abdeslam Gacemi",
