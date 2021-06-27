@@ -12,6 +12,7 @@ use Abdeslam\ConfigurationManager\Loaders\PHPConfigurationLoader;
 use Abdeslam\ConfigurationManager\Loaders\XMLConfigurationLoader;
 use Abdeslam\ConfigurationManager\Loaders\JSONConfigurationLoader;
 use Abdeslam\ConfigurationManager\Contracts\ConfigurationManagerFactoryInterface;
+use Abdeslam\ConfigurationManager\Contracts\ConfigurationManagerInterface;
 use Abdeslam\ConfigurationManager\Exceptions\InvalidConfigurationLoaderException;
 
 class ConfigurationManagerFactory implements ConfigurationManagerFactoryInterface
@@ -25,7 +26,7 @@ class ConfigurationManagerFactory implements ConfigurationManagerFactoryInterfac
     /**
      * @inheritDoc
      */
-    public static function create(string $alias, string ...$filepaths): ConfigurationManager
+    public static function create(string $alias, string ...$filepaths): ConfigurationManagerInterface
     {
         if (array_key_exists($alias, self::$supportedConfigurationLoaders)) {
             $loader = new self::$supportedConfigurationLoaders[$alias]();

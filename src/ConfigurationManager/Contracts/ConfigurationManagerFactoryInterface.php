@@ -6,7 +6,7 @@
 
 namespace Abdeslam\ConfigurationManager\Contracts;
 
-use Abdeslam\ConfigurationManager\ConfigurationManager;
+use Abdeslam\ConfigurationManager\Contracts\ConfigurationManagerInterface;
 
 interface ConfigurationManagerFactoryInterface
 {
@@ -14,9 +14,9 @@ interface ConfigurationManagerFactoryInterface
      * Create a ConfigurationManager::class instance with the valid loader instance and loads the configuration files
      *
      * @param string ...$filePaths php configuration files to load
-     * @return ConfigurationManager
+     * @return ConfigurationManagerInterface
      */
-    public static function create(string $configurationFileType, string ...$filePaths): ConfigurationManager;
+    public static function create(string $configurationFileType, string ...$filePaths): ConfigurationManagerInterface;
     
     /**
      * adds a configuration loader class name with its alias to the array of loaders
