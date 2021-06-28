@@ -14,13 +14,15 @@ use Abdeslam\ConfigurationManager\Loaders\JSONConfigurationLoader;
 use Abdeslam\ConfigurationManager\Contracts\ConfigurationManagerFactoryInterface;
 use Abdeslam\ConfigurationManager\Contracts\ConfigurationManagerInterface;
 use Abdeslam\ConfigurationManager\Exceptions\InvalidConfigurationLoaderException;
+use Abdeslam\ConfigurationManager\Loaders\ENVConfigurationLoader;
 
 class ConfigurationManagerFactory implements ConfigurationManagerFactoryInterface
 {
     protected static $supportedConfigurationLoaders = [
         'php' => PHPConfigurationLoader::class,
         'json' => JSONConfigurationLoader::class,
-        'xml' => XMLConfigurationLoader::class
+        'xml' => XMLConfigurationLoader::class,
+        'env' => ENVConfigurationLoader::class
     ];
 
     /**

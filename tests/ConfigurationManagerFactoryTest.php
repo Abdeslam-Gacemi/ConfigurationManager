@@ -10,6 +10,7 @@ use PHPUnit\Framework\TestCase;
 use Tests\Fixtures\CustomLoader;
 use Abdeslam\ConfigurationManager\ConfigurationManager;
 use Abdeslam\ConfigurationManager\ConfigurationManagerFactory;
+use Abdeslam\ConfigurationManager\Loaders\ENVConfigurationLoader;
 use Abdeslam\ConfigurationManager\Loaders\PHPConfigurationLoader;
 use Abdeslam\ConfigurationManager\Loaders\XMLConfigurationLoader;
 use Abdeslam\ConfigurationManager\Loaders\JSONConfigurationLoader;
@@ -73,6 +74,25 @@ class ConfigurationManagerFactoryTest extends TestCase
         $manager->load();
         $this->assertTrue($manager->has('database'));
         $this->assertTrue($manager->has('environments.development'));
+    }
+
+    /**
+     * @test
+     */
+    public function factoryCreateManagerWithENVLoader()
+    {
+        $manager = ConfigurationManagerFactory::create(
+            'env',
+            __DIR__ . '/config/.env'
+        );
+        $this->assertTrue($manager->hasLoader(ENVConfigurationLoader::class));
+        $this->assertInstanceOf(
+            ENVConfigurationLoader::class,
+            $manager->getLoader(ENVConfigurationLoader::class)
+        );
+        $manager->load();
+        $this->assertTrue($manager->has('username'));
+        $this->assertTrue($manager->has('debug'));
     }
 
     /**
