@@ -4,8 +4,110 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "daf47cb132359fb968310cc8cdf79d45",
-    "packages": [],
+    "content-hash": "2543e2d22960c64451dadc9c79903d90",
+    "packages": [
+        {
+            "name": "abdeslam/envator",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Abdeslam-Gacemi/Envator.git",
+                "reference": "3f30a057a2234da545b344601b14058e57dfde43"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Abdeslam-Gacemi/Envator/zipball/3f30a057a2234da545b344601b14058e57dfde43",
+                "reference": "3f30a057a2234da545b344601b14058e57dfde43",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^8.0",
+                "psr/simple-cache": "^1.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^9.5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Abdeslam\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "abdeslam gacemi",
+                    "email": "abdobling@gmail.com"
+                }
+            ],
+            "keywords": [
+                ".env",
+                "dotenv",
+                "env",
+                "env loader",
+                "php"
+            ],
+            "support": {
+                "issues": "https://github.com/Abdeslam-Gacemi/Envator/issues",
+                "source": "https://github.com/Abdeslam-Gacemi/Envator/tree/v1.0"
+            },
+            "time": "2021-06-27T06:42:51+00:00"
+        },
+        {
+            "name": "psr/simple-cache",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-fig/simple-cache.git",
+                "reference": "408d5eafb83c57f6365a3ca330ff23aa4a5fa39b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-fig/simple-cache/zipball/408d5eafb83c57f6365a3ca330ff23aa4a5fa39b",
+                "reference": "408d5eafb83c57f6365a3ca330ff23aa4a5fa39b",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Psr\\SimpleCache\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PHP-FIG",
+                    "homepage": "http://www.php-fig.org/"
+                }
+            ],
+            "description": "Common interfaces for simple caching",
+            "keywords": [
+                "cache",
+                "caching",
+                "psr",
+                "psr-16",
+                "simple-cache"
+            ],
+            "support": {
+                "source": "https://github.com/php-fig/simple-cache/tree/master"
+            },
+            "time": "2017-10-23T01:57:42+00:00"
+        }
+    ],
     "packages-dev": [
         {
             "name": "doctrine/instantiator",
@@ -2106,6 +2208,8 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],
-    "platform-dev": [],
-    "plugin-api-version": "2.0.0"
+    "platform-dev": {
+        "php": "^8.0"
+    },
+    "plugin-api-version": "2.1.0"
 }

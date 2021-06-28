@@ -8,6 +8,7 @@ namespace Tests;
 
 use ReflectionClass;
 use PHPUnit\Framework\TestCase;
+use Abdeslam\ConfigurationManager\Loaders\ENVConfigurationLoader;
 use Abdeslam\ConfigurationManager\Loaders\PHPConfigurationLoader;
 use Abdeslam\ConfigurationManager\Loaders\XMLConfigurationLoader;
 use Abdeslam\ConfigurationManager\Loaders\JSONConfigurationLoader;
@@ -105,5 +106,18 @@ class ConfigurationLoaderTest extends TestCase
             ]
         ];
         $this->assertSame($expected, $configArray);
+    }
+
+    /**
+     * @test
+     */
+    public function loaderLoadEnvConfiguration()
+    {
+        $loader = new ENVConfigurationLoader();
+        $configArray = $loader->load([__DIR__ . './config/.env']);
+        $this->assertNotEmpty($configArray);
+        $this->assertSame('abdeslam', $configArray['username']);
+        $this->assertSame(false, $configArray['debug']);
+        $this->assertSame('abdeslam_1234', $configArray['password']);
     }
 }
