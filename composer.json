@@ -11,8 +11,11 @@
     ],
     "license": "MIT",
     "keywords": ["configuration", "config", "manager", "loader"],
-    "require-dev": {
+    "require": {
         "php": "^8.0",
+        "abdeslam/envator": "^1.0"
+    },
+    "require-dev": {
         "phpunit/phpunit": "^9.5"
     },
     "autoload": {
@@ -24,8 +27,5 @@
         "psr-4": {
             "Tests\\": "tests/"
         }
-    },
-    "require": {
-        "abdeslam/envator": "^1.0"
     }
 }
