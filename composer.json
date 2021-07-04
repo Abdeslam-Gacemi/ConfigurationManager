@@ -2,7 +2,7 @@
     "name": "abdeslam/configuration-manager",
     "type": "package",
     "description": "A fast, powerful and flexible PHP, JSON and XML configuration loader",
-    "version": "v1.0.0",
+    "license": "MIT",
     "authors": [
         {
             "name": "Abdeslam Gacemi",
