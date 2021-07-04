@@ -2,7 +2,6 @@
     "name": "abdeslam/configuration-manager",
     "type": "package",
     "description": "A fast, powerful and flexible PHP, JSON and XML configuration loader",
-    "license": "MIT",
     "authors": [
         {
             "name": "Abdeslam Gacemi",
@@ -10,7 +9,7 @@
         }
     ],
     "license": "MIT",
-    "keywords": ["configuration", "config", "manager", "loader"],
+    "keywords": ["configuration", "config", "manager", "loader", "json", "xml", "php"],
     "require": {
         "php": "^8.0",
         "abdeslam/envator": "^1.0"
