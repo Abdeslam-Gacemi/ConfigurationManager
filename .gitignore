@@ -1,3 +1,4 @@
 /vendor/
 /.phpunit*
 /.VSCode*
+/composer.lock
